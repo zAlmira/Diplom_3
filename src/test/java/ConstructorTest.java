@@ -1,34 +1,13 @@
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import site.nomoreparties.stellarburgers.pages.MainPageAfterLogin;
 import site.nomoreparties.stellarburgers.pages.SignInPage;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(Parameterized.class)
 public class ConstructorTest extends BaseTest {
-    static WebDriver staticDriver;
-    private static MainPageAfterLogin mainPageAfterLogin = new MainPageAfterLogin(staticDriver);
-    private final By byFrom;
-    private By byTo;
 
-    public ConstructorTest(By byFrom, By byTo) {
-        this.byFrom = byFrom;
-        this.byTo = byTo;
-    }
-
-    @Parameterized.Parameters(name = "Переход к разделу {1} в конструкторе")
-    public static Object[][] dataForMakingTest() {
-        return new Object[][]{
-                {mainPageAfterLogin.getFillingControl(), mainPageAfterLogin.getFillingLabel()},
-                {mainPageAfterLogin.getSouceControl(), mainPageAfterLogin.getSouseLabel()},
-                {mainPageAfterLogin.getBreadControl(), mainPageAfterLogin.getBreadLabel()},
-        };
-    }
 
     @Before
     public void init() {
@@ -39,9 +18,28 @@ public class ConstructorTest extends BaseTest {
     }
 
     @Test
-    public void transitionInConstructor() {
-        driver.findElement(byFrom).click();
-        assertTrue(driver.findElement(byTo).isDisplayed());
+    @DisplayName("Переход в раздел Начинки в конструкторе")
+    public void transitionInConstructorToFillingTest() {
+        MainPageAfterLogin mainPageAfterLogin = new MainPageAfterLogin(driver);
+        mainPageAfterLogin.fillingControlClick();
+        assertEquals("Начинки", mainPageAfterLogin.ingredientLabelGetText());
+    }
+
+    @Test
+    @DisplayName("Переход в раздел Соусы в конструкторе")
+    public void transitionInConstructorToSauceTest() {
+        MainPageAfterLogin mainPageAfterLogin = new MainPageAfterLogin(driver);
+        mainPageAfterLogin.souceControlClick();
+        assertEquals("Соусы", mainPageAfterLogin.ingredientLabelGetText());
+    }
+
+    @Test
+    @DisplayName("Переход в раздел Булки в конструкторе")
+    public void transitionInConstructorToBreadTest() {
+        MainPageAfterLogin mainPageAfterLogin = new MainPageAfterLogin(driver);
+        mainPageAfterLogin.fillingControlClick();
+        mainPageAfterLogin.breadControlClick();
+        assertEquals("Булки", mainPageAfterLogin.ingredientLabelGetText());
     }
 
 }
